@@ -1,0 +1,3 @@
+[submodule "Vendor/php-airbrake"]
+	path = Vendor/php-airbrake
+	url = https://github.com/nodrew/php-airbrake.git
