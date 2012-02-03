@@ -1,7 +1,7 @@
 <?php
 
-App::import('Vendor', 'AirbrakeCake.Airbrake_Configuration', array('file' => 'php-airbrake' . DS . 'src' . DS . 'Airbrake'. DS . 'Configuration.php'));
-App::import('Vendor', 'AirbrakeCake.Airbrake_Client', array('file' => 'php-airbrake' . DS . 'src' . DS . 'Airbrake'. DS . 'Client.php'));
+App::import('Vendor', 'Airbrake_Configuration', array('file' => 'php-airbrake' . DS . 'src' . DS . 'Airbrake'. DS . 'Configuration.php'));
+App::import('Vendor', 'Airbrake_Client', array('file' => 'php-airbrake' . DS . 'src' . DS . 'Airbrake'. DS . 'Client.php'));
 
 class AirbrakeError extends ErrorHandler
 {
