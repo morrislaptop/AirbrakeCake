@@ -11,7 +11,7 @@ app/Config/bootstrap.php
 // Include our awesome error catcher..
 CakePlugin::load('AirbrakeCake');
 Configure::write('AirbrakeCake.apiKey', '<API KEY>');
-App::uses('AirbrakeError', 'AirbrakeCake.Lib');
+App::uses('AirbrakeError', 'Lib');
 ```
 
 app/Config/core.php
