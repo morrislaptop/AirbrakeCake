@@ -19,7 +19,7 @@ class AirbrakeError extends ErrorHandler
         return parent::handleError($code, $description, $file, $line, $context);
     }
     
-    public static function handleException($exception) 
+    public static function handleException(Exception $exception)
     {
     	// Call Airbrake
 		$apiKey  = Configure::read('AirbrakeCake.apiKey'); // This is required
