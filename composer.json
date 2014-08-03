@@ -1,5 +1,5 @@
 {
-    "name": "morrislaptop/airbrake-cake",
+    "name": "morrislaptop/cakephp-airbrake",
     "description": "A CakePHP plugin to use Airbrake for errors and exceptions.",
     "authors": [
         {
