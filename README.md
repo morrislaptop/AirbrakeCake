@@ -3,13 +3,10 @@ CakePHP 2.0 Airbrake
 
 A CakePHP plugin to use Airbrake for errors and exceptions.
 
-Installation
+Installation via Composer
 =========================
 ```
-git submodule add git://github.com/morrislaptop/AirbrakeCake.git app/Plugin/AirbrakeCake
-cd app/Plugin/AirbrakeCake
-git submodule init
-git submodule update
+composer require morrislaptop/cakephp-airbrake 
 ```
     
 
