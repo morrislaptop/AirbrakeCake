@@ -1,35 +1,60 @@
 <?php
-
-App::import('Vendor', 'AirbrakeCake.Airbrake_Configuration', array('file' => 'php-airbrake' . DS . 'src' . DS . 'Airbrake'. DS . 'Configuration.php'));
-App::import('Vendor', 'AirbrakeCake.Airbrake_Client', array('file' => 'php-airbrake' . DS . 'src' . DS . 'Airbrake'. DS . 'Client.php'));
+use Airbrake\Configuration as AirbrakeConfiguration;
+use Airbrake\Client as AirbrakeClient;
 
 class AirbrakeError extends ErrorHandler
 {
-    public static function handleError($code, $description, $file = null, $line = null, $context = null) 
-    {
-    	// Call Airbrake
-		$apiKey  = Configure::read('AirbrakeCake.apiKey'); // This is required
-		$options = array(); // This is optional
 
-		$config = new Airbrake\Configuration($apiKey, $options);
-		$client = new Airbrake\Client($config);
+	/**
+	 * Creates a new Airbrake instance, or returns an instance created earlier.
+	 * You can pass options to Airbrake\Configuration by setting the AirbrakeCake.options
+	 * configuration property.
+	 *
+	 * For example to set the environment name:
+	 *
+	 * ```
+	 * Configure::write('AirbrakeCake.options', array(
+	 * 	'environmentName' => 'staging'
+	 * ));
+	 * ```
+	 *
+	 * @return Airbrake\Client
+	 */
+	public static function getAirbrake() {
+		static $client = null;
+
+		if ($client === null) {
+			$apiKey  = Configure::read('AirbrakeCake.apiKey');
+			$options = Configure::read('AirbrakeCake.options');
+
+			if (!$options) {
+				$options = array();
+			}
+
+			$config = new AirbrakeConfiguration($apiKey, $options);
+			$client = new AirbrakeClient($config);
+		}
+
+		return $client;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function handleError($code, $description, $file = null, $line = null, $context = null) {
+		$client = static::getAirbrake();
 		$client->notifyOnError($description);
-        
-        // Fall back to cake
-        return parent::handleError($code, $description, $file, $line, $context);
-    }
-    
-    public static function handleException(Exception $exception)
-    {
-    	// Call Airbrake
-		$apiKey  = Configure::read('AirbrakeCake.apiKey'); // This is required
-		$options = array(); // This is optional
 
-		$config = new Airbrake\Configuration($apiKey, $options);
-		$client = new Airbrake\Client($config);
+		return parent::handleError($code, $description, $file, $line, $context);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function handleException(Exception $exception) {
+		$client = static::getAirbrake();
 		$client->notifyOnException($exception);
 
-    	// Fall back to Cake..
 		return parent::handleException($exception);
-    }
+	}
 }
