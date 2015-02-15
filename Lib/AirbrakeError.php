@@ -1,6 +1,9 @@
 <?php
 use Airbrake\Configuration as AirbrakeConfiguration;
 use Airbrake\Client as AirbrakeClient;
+use Airbrake\Notice as AirbrakeNotice;
+
+App::uses('Router', 'Routing');
 
 class AirbrakeError extends ErrorHandler
 {
@@ -31,6 +34,15 @@ class AirbrakeError extends ErrorHandler
 				$options = array();
 			}
 
+			if (php_sapi_name() !== 'cli') {
+				$request = Router::getRequest();
+
+				if ($request) {
+					$options['component'] = $request->params['controller';
+					$options['action'] = $request->params['action'];
+				}
+			}
+
 			$config = new AirbrakeConfiguration($apiKey, $options);
 			$client = new AirbrakeClient($config);
 		}
@@ -42,8 +54,23 @@ class AirbrakeError extends ErrorHandler
 	 * {@inheritDoc}
 	 */
 	public static function handleError($code, $description, $file = null, $line = null, $context = null) {
+		list($error, $log) = self::mapErrorCode($code);
+
+		$backtrace = debug_backtrace();
+		if (count($backtrace) > 1) {
+			array_shift($backtrace);
+		}
+
+		$notice = new Notice();
+		$notice->load(array(
+			'errorClass' => $error,
+			'backtrace' => $backtrace,
+			'errorMessage' => $description,
+			'extraParams' => null
+		));
+
 		$client = static::getAirbrake();
-		$client->notifyOnError($description);
+		$client->notify($notice);
 
 		return parent::handleError($code, $description, $file, $line, $context);
 	}
