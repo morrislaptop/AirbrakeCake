@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.0.19",
+            "version": "v1.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "89d77bfbee79e16653f7162c86e602cc188471db"
+                "reference": "1bff8aa77a18f3616f468ed8000cf86a5725bac3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/89d77bfbee79e16653f7162c86e602cc188471db",
-                "reference": "89d77bfbee79e16653f7162c86e602cc188471db",
+                "url": "https://api.github.com/repos/composer/installers/zipball/1bff8aa77a18f3616f468ed8000cf86a5725bac3",
+                "reference": "1bff8aa77a18f3616f468ed8000cf86a5725bac3",
                 "shasum": ""
             },
             "replace": {
@@ -59,6 +59,7 @@
                 "Hurad",
                 "MODX Evo",
                 "OXID",
+                "SMF",
                 "Thelia",
                 "WolfCMS",
                 "agl",
@@ -97,29 +98,31 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2014-11-29 01:29:17"
+            "time": "2015-01-11 03:51:11"
         },
         {
             "name": "dbtlr/php-airbrake",
-            "version": "1.0.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dbtlr/php-airbrake.git",
-                "reference": "e00b6012dfc44d9c8aea05f43abb54a7ef79f74f"
+                "reference": "508e1e1f0de64810b9547777d29326b421c6db7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dbtlr/php-airbrake/zipball/e00b6012dfc44d9c8aea05f43abb54a7ef79f74f",
-                "reference": "e00b6012dfc44d9c8aea05f43abb54a7ef79f74f",
+                "url": "https://api.github.com/repos/dbtlr/php-airbrake/zipball/508e1e1f0de64810b9547777d29326b421c6db7c",
+                "reference": "508e1e1f0de64810b9547777d29326b421c6db7c",
                 "shasum": ""
             },
-            "require": {
-                "php": ">=5.3.1"
+            "require-dev": {
+                "php": ">=5.3.3",
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "*"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Airbrake": "src/"
+                    "Airbrake\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -141,7 +144,7 @@
                 "exceptions",
                 "logging"
             ],
-            "time": "2014-09-25 17:00:28"
+            "time": "2015-02-13 17:28:15"
         }
     ],
     "packages-dev": [],

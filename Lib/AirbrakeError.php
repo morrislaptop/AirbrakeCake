@@ -1,6 +1,9 @@
 <?php
 use Airbrake\Configuration as AirbrakeConfiguration;
 use Airbrake\Client as AirbrakeClient;
+use Airbrake\Notice as AirbrakeNotice;
+
+App::uses('Router', 'Routing');
 
 class AirbrakeError extends ErrorHandler
 {
@@ -24,11 +27,25 @@ class AirbrakeError extends ErrorHandler
 		static $client = null;
 
 		if ($client === null) {
-			$apiKey  = Configure::read('AirbrakeCake.apiKey');
+			$apiKey = Configure::read('AirbrakeCake.apiKey');
 			$options = Configure::read('AirbrakeCake.options');
 
 			if (!$options) {
 				$options = array();
+			}
+
+			if (php_sapi_name() !== 'cli') {
+				$request = Router::getRequest();
+
+				if ($request) {
+					$options['component'] = $request->params['controller'];
+					$options['action'] = $request->params['action'];
+				}
+
+				if (!empty($_SESSION)) {
+					$options['extraParameters'] = Hash::get($options, 'extraParameters', array());
+					$options['extraParameters']['User']['id'] = Hash::get($_SESSION, 'Auth.User.id');
+				}
 			}
 
 			$config = new AirbrakeConfiguration($apiKey, $options);
@@ -42,8 +59,23 @@ class AirbrakeError extends ErrorHandler
 	 * {@inheritDoc}
 	 */
 	public static function handleError($code, $description, $file = null, $line = null, $context = null) {
+		list($error, $log) = self::mapErrorCode($code);
+
+		$backtrace = debug_backtrace();
+		if (count($backtrace) > 1) {
+			array_shift($backtrace);
+		}
+
+		$notice = new AirbrakeNotice();
+		$notice->load(array(
+			'errorClass' => $error,
+			'backtrace' => $backtrace,
+			'errorMessage' => $description,
+			'extraParams' => null
+		));
+
 		$client = static::getAirbrake();
-		$client->notifyOnError($description);
+		$client->notify($notice);
 
 		return parent::handleError($code, $description, $file, $line, $context);
 	}
