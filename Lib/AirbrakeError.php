@@ -27,7 +27,7 @@ class AirbrakeError extends ErrorHandler
 		static $client = null;
 
 		if ($client === null) {
-			$apiKey  = Configure::read('AirbrakeCake.apiKey');
+			$apiKey = Configure::read('AirbrakeCake.apiKey');
 			$options = Configure::read('AirbrakeCake.options');
 
 			if (!$options) {
@@ -38,8 +38,13 @@ class AirbrakeError extends ErrorHandler
 				$request = Router::getRequest();
 
 				if ($request) {
-					$options['component'] = $request->params['controller';
+					$options['component'] = $request->params['controller'];
 					$options['action'] = $request->params['action'];
+				}
+
+				if (!empty($_SESSION)) {
+					$options['extraParameters'] = Hash::get($options, 'extraParameters', array());
+					$options['extraParameters']['User']['id'] = Hash::get($_SESSION, 'Auth.User.id');
 				}
 			}
 
