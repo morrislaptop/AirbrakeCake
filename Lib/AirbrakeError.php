@@ -61,7 +61,7 @@ class AirbrakeError extends ErrorHandler
 			array_shift($backtrace);
 		}
 
-		$notice = new Notice();
+		$notice = new AirbrakeNotice();
 		$notice->load(array(
 			'errorClass' => $error,
 			'backtrace' => $backtrace,
